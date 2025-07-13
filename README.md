@@ -1,146 +1,123 @@
-# 🛒 NFT Marketplace (Foundry + Solidity + Vite Frontend)
+# 🛒 NFT Marketplace (Foundry + Vite + Solidity)
 
-This project is a minimal yet fully functional **NFT Marketplace** built using **Foundry (Solidity)** for smart contracts and **React + Vite + Tailwind CSS** for the frontend. It allows users to:
+This is a minimal, full-stack **NFT Marketplace** project built using **Solidity**, **Foundry**, and a modern **React (Vite)** frontend. It allows users to:
 
-✅ Mint NFTs (via a hardcoded ERC721 MockNFT)  
 ✅ List NFTs for sale  
 ✅ Buy NFTs with ETH  
-✅ Cancel listed NFTs  
-✅ Transfer ownership on successful purchase
+✅ Cancel NFT listings  
+✅ Transfer ownership on purchase
+
+It includes a clean test suite using **Forge**, is fully frontend-integrated with **RainbowKit + Wagmi**, and is built to showcase real-world smart contract interaction.
 
 ---
 
 ## 🔧 Tech Stack
 
-**Smart Contracts**
-- Solidity ^0.8.24
-- Foundry (Forge, Anvil, Cast)
-- VM Cheatcodes (for testing)
-- Hardcoded ERC721-compatible `MockNFT.sol` for demo purposes
+### Backend
+- **Solidity** `^0.8.24`
+- **Foundry** (`Forge`, `Anvil`, `Cast`)
+- **Hardcoded ERC721-like mock NFT** for simplicity
+- **Unit tests with cheatcodes**
 
-**Frontend**
-- React.js (via Vite)
-- Tailwind CSS
-- Wagmi + RainbowKit (wallet connection)
-- Ethers.js
+### Frontend
+- **React** with **Vite**
+- **Tailwind CSS**
+- **RainbowKit** + **Wagmi** + **Ethers.js**
+- Supports wallet connection, listing NFTs, buying, canceling
 
 ---
 
 ## 📁 Project Structure
 
 nft-marketplace/
-├── frontend/ # Vite + React + Tailwind frontend
-│ ├── src/
-│ │ ├── App.jsx # Main UI
-│ │ ├── index.css
-│ │ └── main.jsx
-│ ├── contract.js # Contract ABI & address
-│ └── ...
 ├── src/
-│ ├── NFTMarketplace.sol # Marketplace contract (list, buy, cancel)
-│ └── MockNFT.sol # Minimal ERC721 NFT
+│ └── NFTMarketplace.sol # Marketplace smart contract
 ├── test/
-│ └── NFTMarketplace.t.sol # Unit tests for core features
+│ └── NFTMarketplace.t.sol # Full test suite using Forge
 ├── script/
-│ └── Deploy.s.sol # Script for deployment
-├── foundry.toml # Foundry config
-└── README.md # You're reading it
+│ └── Deploy.s.sol # Deployment script
+├── frontend/
+│ ├── src/
+│ │ ├── App.jsx # React UI (List, Buy, Cancel)
+│ │ ├── main.jsx, index.css # App bootstrap & styles
+│ └── package.json, tailwind.config.js, ...
+├── foundry.toml
+└── README.md
 
-yaml
-Copy
-Edit
 
 ---
 
-## ⚙️ How to Run
+## 🚀 Features
 
-### Backend (Foundry)
+### ✅ Core Smart Contract Functions
 
-1. **Install Foundry**
+#### `listNFT(address nft, uint tokenId, uint price)`
+- Lists an NFT on the marketplace
+- Must be owner of token
+- Must not already be listed
+
+#### `buyNFT(address nft, uint tokenId)`
+- Transfers NFT to buyer
+- Transfers ETH to seller
+
+#### `cancelListing(address nft, uint tokenId)`
+- Cancels an active listing
+- Only callable by the original seller
+
+---
+
+## 🧪 Tests (Forge)
+
+- ✅ Lists an NFT successfully
+- ✅ Transfers NFT & ETH correctly on purchase
+- ✅ Prevents buying with incorrect price
+- ✅ Allows only seller to cancel
+- ✅ Reverts unauthorized actions
+- ✅ Simulates ownership, ETH balances, reverts
+
+Run with:
 ```bash
-curl -L https://foundry.paradigm.xyz | bash
-foundryup
-Compile Contracts
-
-bash
-Copy
-Edit
-forge build
-Run Tests
-
-bash
-Copy
-Edit
 forge test
-Deploy Locally
 
-bash
-Copy
-Edit
-anvil
-Then deploy using script or manually via frontend.
+🌐 Frontend Usage
 
-Frontend (Vite + React)
-Install dependencies
-
-bash
-Copy
-Edit
 cd frontend
 npm install
-Start dev server
-
-bash
-Copy
-Edit
 npm run dev
-Open browser
-Go to: http://localhost:5173
 
-📦 Contract Overview
-NFTMarketplace.sol
-Function	Description
-listNFT()	List an NFT for sale
-buyNFT()	Buy a listed NFT with ETH
-cancelNFT()	Cancel a listed NFT
-listings	Mapping from NFT address + tokenId to Listing
+Connect your wallet with RainbowKit
 
-MockNFT.sol
-Minimal ERC721 contract
+List NFTs with contract address, tokenId, and price
 
-Function: mint(uint tokenId, address to)
+Buy NFTs with ETH (uses native value)
 
-Used for testing and demo purposes only.
+Cancel listings if you are the seller
 
-🧪 Tests (via Forge)
-✔️ Lists an NFT
-✔️ Transfers NFT and ETH on purchase
-✔️ Cancels listing
-✔️ Prevents unauthorized actions
-✔️ Uses vm.deal() to simulate balances
+⚙️ Deploy & Run
 
-🚀 Future Additions
-Update price of listings
+1. Install Foundry
+curl -L https://foundry.paradigm.xyz | bash
+foundryup
 
-Withdraw seller earnings
+2. Compile & Test
+forge build
+forge test
 
-Marketplace fees and royalties
+3. Start Frontend
+cd frontend
+npm run dev
 
-Events + logs
-
-Full OpenZeppelin ERC721 integration
-
-Persistent storage via backend / IPFS
 
 👨‍💻 Author
 Adarsh Kumar
 Blockchain Developer — Dubai / India
-💼 Solidity | Smart Contracts | Crypto Trading
+💼 Solidity | Smart Contracts | DApps | Crypto Trading
 🔗 LinkedIn
-📫 Email: adarshkscodes@gmail.com
+📧 adarshkscodes@gmail.com
 
-📝 License
-This project is for educational purposes.
+📌 License
 SPDX-License-Identifier: UNLICENSED
+This project is intended for educational and portfolio purposes only.
+
 
 ---
