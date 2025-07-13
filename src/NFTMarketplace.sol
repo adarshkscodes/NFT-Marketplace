@@ -1,10 +1,13 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+interface IERC721 {
+    function ownerOf(uint256 tokenId) external view returns (address);
+
+    function transferFrom(address from, address to, uint256 tokenId) external;
+}
 
 contract NFTMarketplace {
-    /* ---------- Errors ---------- */
     error AlreadyListed();
     error NotListed();
     error IncorrectPrice();
@@ -16,8 +19,8 @@ contract NFTMarketplace {
         address seller;
         uint256 price;
     }
-    // nft => tokenId => Listing
 
+    // nft => tokenId => Listing
     mapping(address => mapping(uint256 => Listing)) public listings;
 
     /* ---------- List ---------- */
@@ -42,8 +45,8 @@ contract NFTMarketplace {
         require(sent, "ETH transfer failed");
     }
 
-    /* ---------- Cancel (NEW) ---------- */
-    function cancelList(address nft, uint256 tokenId) external {
+    /* ---------- Cancel ---------- */
+    function cancelListing(address nft, uint256 tokenId) external {
         Listing memory listing = listings[nft][tokenId];
         if (listing.seller == address(0)) revert NotListed();
         if (listing.seller != msg.sender) revert NotSeller();
