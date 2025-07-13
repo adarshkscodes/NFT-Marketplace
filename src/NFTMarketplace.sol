@@ -9,7 +9,7 @@ contract NFTMarketplace {
     error NotListed();
     error IncorrectPrice();
     error NotOwner();
-    error NotSeller();              // 👈 NEW
+    error NotSeller(); // 👈 NEW
 
     /* ---------- Data ---------- */
     struct Listing {
@@ -17,14 +17,11 @@ contract NFTMarketplace {
         uint256 price;
     }
     // nft => tokenId => Listing
+
     mapping(address => mapping(uint256 => Listing)) public listings;
 
     /* ---------- List ---------- */
-    function listNFT(
-        address nft,
-        uint256 tokenId,
-        uint256 price
-    ) external {
+    function listNFT(address nft, uint256 tokenId, uint256 price) external {
         if (price == 0) revert IncorrectPrice();
         if (listings[nft][tokenId].seller != address(0)) revert AlreadyListed();
         if (IERC721(nft).ownerOf(tokenId) != msg.sender) revert NotOwner();
@@ -41,7 +38,7 @@ contract NFTMarketplace {
         delete listings[nft][tokenId];
         IERC721(nft).transferFrom(listing.seller, msg.sender, tokenId);
 
-        (bool sent, ) = payable(listing.seller).call{value: msg.value}("");
+        (bool sent,) = payable(listing.seller).call{value: msg.value}("");
         require(sent, "ETH transfer failed");
     }
 
