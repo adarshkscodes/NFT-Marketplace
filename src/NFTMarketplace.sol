@@ -35,17 +35,16 @@ contract NFTMarketplace {
     }
 
     function buyNFT(address nft, uint256 tokenId) external payable {
-    Listing memory listing = listings[nft][tokenId];
-    if (listing.seller == address(0)) revert NotListed();
-    if (msg.value != listing.price) revert IncorrectPrice();
+        Listing memory listing = listings[nft][tokenId];
+        if (listing.seller == address(0)) revert NotListed();
+        if (msg.value != listing.price) revert IncorrectPrice();
 
-    delete listings[nft][tokenId];
+        delete listings[nft][tokenId];
 
-    IERC721(nft).transferFrom(listing.seller, msg.sender, tokenId);
+        IERC721(nft).transferFrom(listing.seller, msg.sender, tokenId);
 
-    // SAFER than `.transfer()` ✅
-    (bool sent, ) = payable(listing.seller).call{value: msg.value}("");
-    require(sent, "ETH transfer failed");
-}
-
+        // SAFER than `.transfer()` ✅
+        (bool sent,) = payable(listing.seller).call{value: msg.value}("");
+        require(sent, "ETH transfer failed");
+    }
 }
