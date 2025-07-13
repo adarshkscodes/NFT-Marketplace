@@ -1,22 +1,22 @@
-# 🧱 NFT Marketplace (Foundry + Solidity)
+# 🛒 NFT Marketplace (Foundry + Solidity)
 
-This project is a minimal **NFT Marketplace** built with [Foundry](https://book.getfoundry.sh/), allowing users to:
+This project is a minimal **NFT Marketplace** built with **Foundry**, allowing users to:
 
-- ✅ Mint NFTs (via MockNFT)
-- ✅ List NFTs for sale
-- ✅ Buy NFTs with ETH
-- ✅ Transfer ownership on successful purchase
+✅ Mint NFTs (via MockNFT)  
+✅ List NFTs for sale  
+✅ Buy NFTs with ETH  
+✅ Transfer ownership on successful purchase  
 
-It includes a complete test suite using Forge and is designed for learning, GitHub showcasing, and blockchain developer interviews.
+It includes a complete **test suite using Forge** and is designed for **learning**, **GitHub showcasing**, and **blockchain developer interviews**.
 
 ---
 
 ## 🔧 Tech Stack
 
-- **Solidity** `^0.8.24`
-- **Foundry** (Forge, Anvil, Cast)
-- **VM Cheatcodes** for test simulations
-- **Hardcoded ERC721 NFT** for simplicity
+- Solidity ^0.8.24  
+- Foundry (Forge, Anvil, Cast)  
+- VM Cheatcodes for test simulations  
+- Hardcoded ERC721 NFT for simplicity  
 
 ---
 
@@ -35,9 +35,9 @@ nft-marketplace/
 
 ---
 
-## ⚙️ How to Run
+## ⚙️ How to Run (Backend)
 
-### 1. Install Foundry (if not already)
+1. Install Foundry (if not already):
 
 ```bash
 curl -L https://foundry.paradigm.xyz | bash
@@ -52,36 +52,36 @@ buyNFT(address nft, uint tokenId) (payable)
 Maintains a mapping of listings by NFT address and tokenId
 
 MockNFT.sol
-ERC721-like mintable NFT with mint(uint tokenId, address to)
+mint(uint tokenId, address to)
 
-Used for testing only
+ERC721-like NFT used for testing only
 
 🧪 Tests
 ✔️ Lists an NFT successfully
-
 ✔️ Transfers NFT and ETH on purchase
-
-🔒 Checks ownership
-
-💰 Uses vm.deal() to simulate account balances
+✔️ Checks ownership restrictions
+✔️ Uses vm.deal() to simulate balances
 
 🚀 Future Additions
 Cancel listing
 
-Update price
+Update listing price
 
-Withdraw earnings
+Withdraw seller earnings
 
-Event logs
+Emit event logs
 
-Real ERC721 (OpenZeppelin)
+Use real OpenZeppelin ERC721
 
-Frontend with Next.js or Vite
+Frontend with Vite + RainbowKit ✅
 
 👨‍💻 Author
 Adarsh Kumar
 Blockchain Developer — Dubai / India
 💼 Solidity | Smart Contracts | Crypto Trading
-🔗 LinkedIn https://www.linkedin.com/in/adarshkscodes/
+
+🔗 LinkedIn
 📫 Email: adarshkscodes@gmail.com
 
+
+---
