@@ -1,41 +1,56 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
-error NotOwner();
-error AlreadyListed();
-error NotListed();
-error IncorrectPrice();
-
 contract NFTMarketplace {
+    /* ---------- Errors ---------- */
+    error AlreadyListed();
+    error NotListed();
+    error IncorrectPrice();
+    error NotOwner();
+    error NotSeller();              // 👈 NEW
+
+    /* ---------- Data ---------- */
     struct Listing {
         address seller;
         uint256 price;
     }
-
+    // nft => tokenId => Listing
     mapping(address => mapping(uint256 => Listing)) public listings;
 
-    function listNFT(address nft, uint256 tokenId, uint256 price) external {
-        IERC721 token = IERC721(nft);
-
-        if (token.ownerOf(tokenId) != msg.sender) revert NotOwner();
+    /* ---------- List ---------- */
+    function listNFT(
+        address nft,
+        uint256 tokenId,
+        uint256 price
+    ) external {
+        if (price == 0) revert IncorrectPrice();
         if (listings[nft][tokenId].seller != address(0)) revert AlreadyListed();
+        if (IERC721(nft).ownerOf(tokenId) != msg.sender) revert NotOwner();
 
         listings[nft][tokenId] = Listing(msg.sender, price);
     }
 
+    /* ---------- Buy ---------- */
     function buyNFT(address nft, uint256 tokenId) external payable {
         Listing memory listing = listings[nft][tokenId];
         if (listing.seller == address(0)) revert NotListed();
         if (msg.value != listing.price) revert IncorrectPrice();
 
         delete listings[nft][tokenId];
-
         IERC721(nft).transferFrom(listing.seller, msg.sender, tokenId);
 
-        // SAFER than `.transfer()` ✅
-        (bool sent,) = payable(listing.seller).call{value: msg.value}("");
+        (bool sent, ) = payable(listing.seller).call{value: msg.value}("");
         require(sent, "ETH transfer failed");
+    }
+
+    /* ---------- Cancel (NEW) ---------- */
+    function cancelList(address nft, uint256 tokenId) external {
+        Listing memory listing = listings[nft][tokenId];
+        if (listing.seller == address(0)) revert NotListed();
+        if (listing.seller != msg.sender) revert NotSeller();
+
+        delete listings[nft][tokenId];
     }
 }
